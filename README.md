@@ -1,6 +1,6 @@
 # matrix_dbus ([English](/README.en.md))
 
-[matrix](https://matrix.org) 和 [QQ](https://im.qq.com) 的桥。
+[matrix](https://matrix.org) 和 D-Bus 的桥。
 
 ## 安装
 

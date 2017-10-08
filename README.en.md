@@ -1,6 +1,6 @@
 # matrix_dbus ([中文](/README.md))
 
-The bridge between [matrix](https://matrix.org) and [QQ](https://im.qq.com).
+The bridge between [matrix](https://matrix.org) and D-Bus.
 
 ## Installation
 

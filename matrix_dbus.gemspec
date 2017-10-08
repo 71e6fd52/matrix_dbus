@@ -8,7 +8,7 @@ Gem::Specification.new do |spec|
   spec.authors       = ['71e6fd52']
   spec.email         = ['DAStudio.71e6fd52@gmail.com']
 
-  spec.summary       = 'matrix to D-Bus'
+  spec.summary       = '[matrix](https://matrix.org) to D-Bus'
   spec.homepage      = 'https://github.com/71e6fd52/matrix_dbus'
 
   spec.files         = `git ls-files -z`.split("\x0").reject do |f|
