@@ -1,0 +1,39 @@
+#!/usr/bin/env ruby
+
+require 'matrix_dbus'
+Thread.abort_on_exception = true
+
+def send(obj, name, json)
+  obj.method(name).call json.to_json unless json.empty?
+end
+
+def matrix2dbus(c, obj)
+  j = c.json
+  obj.all j.to_json
+
+  %i[account_data to_device presence].each do |name|
+    send obj, name, j[name.to_s]['events']
+  end
+
+  send obj, :rooms, j['rooms']
+  %i[leave join invite].each do |name|
+    send obj, name, j['rooms'][name.to_s]
+  end
+
+  send obj, :device_lists, j['device_lists']
+  %i[changed left].each do |name|
+    send obj, name, j['device_lists'][name.to_s]
+  end
+end
+
+bus = DBus::SessionBus.instance
+service = bus.request_service 'org.dastudio.matrix'
+obj = MatrixDBus::Matrix2DBus.new '/org/dastudio/matrix'
+service.export obj
+
+obj.matrix.bind ->(c) { matrix2dbus c, obj }
+obj.run
+
+main = DBus::Main.new
+main << bus
+main.run

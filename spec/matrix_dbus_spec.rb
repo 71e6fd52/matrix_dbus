@@ -1,8 +1,8 @@
 require "spec_helper"
 
-RSpec.describe MatrixDbus do
+RSpec.describe MatrixDBus do
   it "has a version number" do
-    expect(MatrixDbus::VERSION).not_to be nil
+    expect(MatrixDBus::VERSION).not_to be nil
   end
 
   it "does something useful" do

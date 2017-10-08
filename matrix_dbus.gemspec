@@ -1,10 +1,10 @@
 lib = File.expand_path('../lib', __FILE__)
 $LOAD_PATH.unshift(lib) unless $LOAD_PATH.include?(lib)
-require 'CQHTTP/version'
+require 'matrix_dbus/version'
 
 Gem::Specification.new do |spec|
   spec.name          = 'matrix_dbus'
-  spec.version       = MatrixDbus::VERSION
+  spec.version       = MatrixDBus::VERSION
   spec.authors       = ['71e6fd52']
   spec.email         = ['DAStudio.71e6fd52@gmail.com']
 
@@ -23,4 +23,5 @@ Gem::Specification.new do |spec|
   spec.add_development_dependency 'rspec',   '~> 3.0'
 
   spec.add_dependency 'ruby-dbus', '~> 0.13.0'
+  spec.add_dependency 'rest-client', '~> 2.0'
 end
