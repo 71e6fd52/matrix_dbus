@@ -15,11 +15,13 @@ module MatrixDBus
     dbus_interface 'org.dastudio.matrix' do
       %i[post put].each do |way|
         dbus_method way, 'in url:s, in args:s, out res:s' do |url, args|
+          args = '{}' if args == ''
           args = JSON.parse args
           url = URI(url)
           url.query = URI.encode_www_form access_token: @matrix.access_token
+          url = url.to_s
           begin
-            [@matrix.network.method(way).call(url.to_s, args).to_json]
+            [@matrix.network.method(way).call(url, args).to_json]
           rescue RestClient::Exception => e
             puts e
             puts e.response.body
@@ -29,6 +31,7 @@ module MatrixDBus
 
       %i[get delete].each do |way|
         dbus_method way, 'in url:s, in args:s, out res:s' do |url, args|
+          args = '{}' if args == ''
           args = JSON.parse args
           args[:access_token] = @matrix.access_token
           begin
