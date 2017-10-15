@@ -4,12 +4,12 @@ require 'matrix_dbus'
 Thread.abort_on_exception = true
 
 def send_if_exist(obj, name, json)
-  obj.method(name).call json.to_json unless json.empty?
+  obj.method(name).call JSON.pretty_generate json unless json.empty?
 end
 
 def matrix2dbus(c, obj)
   j = c.json
-  obj.all j.to_json
+  obj.all JSON.pretty_generate j
 
   %i[account_data to_device presence].each do |name|
     send_if_exist obj, name, j[name.to_s]['events']
