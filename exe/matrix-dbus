@@ -3,7 +3,7 @@
 require 'matrix_dbus'
 Thread.abort_on_exception = true
 
-def send(obj, name, json)
+def send_if_exist(obj, name, json)
   obj.method(name).call json.to_json unless json.empty?
 end
 
@@ -12,17 +12,17 @@ def matrix2dbus(c, obj)
   obj.all j.to_json
 
   %i[account_data to_device presence].each do |name|
-    send obj, name, j[name.to_s]['events']
+    send_if_exist obj, name, j[name.to_s]['events']
   end
 
-  send obj, :rooms, j['rooms']
+  send_if_exist obj, :rooms, j['rooms']
   %i[leave join invite].each do |name|
-    send obj, name, j['rooms'][name.to_s]
+    send_if_exist obj, name, j['rooms'][name.to_s]
   end
 
-  send obj, :device_lists, j['device_lists']
+  send_if_exist obj, :device_lists, j['device_lists']
   %i[changed left].each do |name|
-    send obj, name, j['device_lists'][name.to_s]
+    send_if_exist obj, name, j['device_lists'][name.to_s]
   end
 end
 
