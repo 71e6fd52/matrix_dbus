@@ -14,33 +14,39 @@ module MatrixDBus
 
     dbus_interface 'org.dastudio.matrix' do
       %i[post put].each do |way|
-        dbus_method way, 'in url:s, in args:s' do |url, args|
+        dbus_method way, 'in url:s, in args:s, out res:s' do |url, args|
           args = JSON.parse args
           url = URI(url)
           url.query = URI.encode_www_form access_token: @matrix.access_token
           begin
-            @matrix.network.method(way).call url.to_s, args
+            [@matrix.network.method(way).call(url.to_s, args).to_json]
           rescue RestClient::Exception => e
+            puts e
             puts e.response.body
           end
         end
       end
 
       %i[get delete].each do |way|
-        dbus_method way, 'in url:s, in args:s' do |url, args|
+        dbus_method way, 'in url:s, in args:s, out res:s' do |url, args|
           args = JSON.parse args
           args[:access_token] = @matrix.access_token
           begin
-            @matrix.network.method(way).call url, args
+            [@matrix.network.method(way).call(url, args).to_json]
           rescue RestClient::Exception => e
+            puts e
             puts e.response.body
           end
         end
       end
 
-      dbus_method :post_raw, 'in url:s, in body:s' do |url, body|
-        body = Base64.decode64 body
-        @matrix.network.post_raw url, body
+      dbus_method :post_raw, 'in url:s, in body:s, out res:s' do |url, body|
+        begin
+          [@matrix.network.post_raw(url, Base64.decode64(body)).to_json]
+        rescue RestClient::Exception => e
+          puts e
+          puts e.response.body
+        end
       end
 
       %i[
