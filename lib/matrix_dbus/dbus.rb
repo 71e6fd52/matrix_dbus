@@ -12,6 +12,7 @@ module MatrixDBus
       Thread.new { @matrix.run }
     end
 
+    # rubocop:disable Metrics/BlockLength
     dbus_interface 'org.dastudio.matrix' do
       %i[post put].each do |way|
         dbus_method way, 'in url:s, in args:s, out res:s' do |url, args|

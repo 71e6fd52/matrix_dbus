@@ -13,12 +13,8 @@ module MatrixAPI
   def post(url, body)
     uri = @host + '/_matrix/client/r0' + url
     puts 'POST URL:', uri if $VERBOSE
-    JSON.parse RestClient.post(
-      uri,
-      body,
-      content_type: :json,
-      accept: :json
-    ).body
+    JSON.parse \
+      RestClient.post(uri, body, content_type: :json, accept: :json).body
   rescue RestClient::Exceptions::OpenTimeout
     retry
   rescue RestClient::BadGateway
@@ -28,12 +24,8 @@ module MatrixAPI
   def put(url, body)
     uri = @host + '/_matrix/client/r0' + url
     puts 'PUT URL:', uri if $VERBOSE
-    JSON.parse RestClient.put(
-      uri,
-      body.to_json,
-      content_type: :json,
-      accept: :json
-    ).body
+    JSON.parse \
+      RestClient.put(uri, body.to_json, content_type: :json, accept: :json).body
   rescue RestClient::Exceptions::OpenTimeout
     retry
   rescue RestClient::BadGateway

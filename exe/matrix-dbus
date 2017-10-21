@@ -4,25 +4,33 @@ require 'matrix_dbus'
 Thread.abort_on_exception = true
 
 def send_if_exist(obj, name, json)
-  obj.method(name).call JSON.pretty_generate json unless json.empty?
+  obj.send name, JSON.pretty_generate(json) unless json.empty?
 end
 
 def matrix2dbus(c, obj)
-  j = c.json
-  obj.all JSON.pretty_generate j
+  json = c.json
+  %i[normal rooms device].each { |a| send a, obj, json }
+end
 
-  %i[account_data to_device presence].each do |name|
-    send_if_exist obj, name, j[name.to_s]['events']
+def normal(obj, json)
+  obj.all JSON.pretty_generate json
+
+  %w[account_data to_device presence].each do |name|
+    send_if_exist obj, name, json[name]['events']
   end
+end
 
-  send_if_exist obj, :rooms, j['rooms']
-  %i[leave join invite].each do |name|
-    send_if_exist obj, name, j['rooms'][name.to_s]
+def rooms(obj, json)
+  send_if_exist obj, :rooms, json['rooms']
+  %w[leave join invite].each do |name|
+    send_if_exist obj, name, json['rooms'][name]
   end
+end
 
-  send_if_exist obj, :device_lists, j['device_lists']
-  %i[changed left].each do |name|
-    send_if_exist obj, name, j['device_lists'][name.to_s]
+def device(obj, json)
+  send_if_exist obj, :device_lists, json['device_lists']
+  %w[changed left].each do |name|
+    send_if_exist obj, name, json['device_lists'][name]
   end
 end
 
