@@ -18,27 +18,18 @@ module MatrixDBus
 
     # rubocop:disable Metrics/BlockLength
     dbus_interface 'org.dastudio.matrix' do
-      %i[post put].each do |way|
+      %i[post put get delete].each do |way|
         dbus_method way, 'in url:s, in args:s, out res:s' do |url, args|
           args = '{}' if args == ''
           args = JSON.parse args
-          url = URI(url)
-          url.query = URI.encode_www_form access_token: @matrix.access_token
-          url = url.to_s
-          begin
-            Matrix2DBus.return @matrix.network.method(way).call(url, args)
-          rescue RestClient::Exception => e
-            puts e
-            puts e.response.body
+          if %i[get delete].include? way
+            args[:access_token] = @matrix.access_token
+          elsif %i[post put].include? way
+            url = URI(url)
+            url.query = URI.encode_www_form access_token: @matrix.access_token
+            url = url.to_s
+          else raise 'Connot raise'
           end
-        end
-      end
-
-      %i[get delete].each do |way|
-        dbus_method way, 'in url:s, in args:s, out res:s' do |url, args|
-          args = '{}' if args == ''
-          args = JSON.parse args
-          args[:access_token] = @matrix.access_token
           begin
             Matrix2DBus.return @matrix.network.method(way).call(url, args)
           rescue RestClient::Exception => e
