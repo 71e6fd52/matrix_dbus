@@ -53,6 +53,19 @@ module MatrixDBus
         end
       end
 
+      dbus_method :upload_file, 'in file:s, out mxc:s' do |file|
+        url = URI('/upload')
+        url.query = URI.encode_www_form access_token: @matrix.access_token
+        begin
+          File.open(file, 'rb') do |f|
+            [@matrix.network.post_raw(url.to_s, f)]
+          end
+        rescue RestClient::Exception => e
+          puts e
+          puts e.response.body
+        end
+      end
+
       %i[
         all
         account_data
