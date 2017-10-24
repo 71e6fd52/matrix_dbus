@@ -12,6 +12,10 @@ module MatrixDBus
       Thread.new { @matrix.run }
     end
 
+    def self.return(info)
+      [JSON.pretty_generate(info)]
+    end
+
     # rubocop:disable Metrics/BlockLength
     dbus_interface 'org.dastudio.matrix' do
       %i[post put].each do |way|
@@ -22,7 +26,7 @@ module MatrixDBus
           url.query = URI.encode_www_form access_token: @matrix.access_token
           url = url.to_s
           begin
-            [@matrix.network.method(way).call(url, args).to_json]
+            Matrix2DBus.return @matrix.network.method(way).call(url, args)
           rescue RestClient::Exception => e
             puts e
             puts e.response.body
@@ -36,7 +40,7 @@ module MatrixDBus
           args = JSON.parse args
           args[:access_token] = @matrix.access_token
           begin
-            [@matrix.network.method(way).call(url, args).to_json]
+            Matrix2DBus.return @matrix.network.method(way).call(url, args)
           rescue RestClient::Exception => e
             puts e
             puts e.response.body
@@ -46,7 +50,8 @@ module MatrixDBus
 
       dbus_method :post_raw, 'in url:s, in body:s, out res:s' do |url, body|
         begin
-          [@matrix.network.post_raw(url, Base64.decode64(body)).to_json]
+          data = Base64.decode64 body
+          Matrix2DBus.return @matrix.network.post_raw(url, data)
         rescue RestClient::Exception => e
           puts e
           puts e.response.body
@@ -56,9 +61,10 @@ module MatrixDBus
       dbus_method :upload_file, 'in file:s, out mxc:s' do |file|
         url = URI('/upload')
         url.query = URI.encode_www_form access_token: @matrix.access_token
+        url = url.to_s
         begin
           File.open(file, 'rb') do |f|
-            [@matrix.network.post_raw(url.to_s, f)]
+            Matrix2DBus.return @matrix.network.post_raw(url, f)
           end
         rescue RestClient::Exception => e
           puts e
