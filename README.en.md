@@ -20,6 +20,10 @@ Or install it yourself as:
 
 ## Usage
 
+Service: `org.dastudio.qq`
+Object path: `/org/dastudio/qq`
+Interface: `org.dastudio.cqhttp`
+
 TODO: Write usage instructions here
 
 ## Development
