@@ -8,7 +8,7 @@ module MatrixDBus
       @password = password
       @run = true
       @event_method = []
-      @config = File.join(ENV['HOME'], '.config', 'matrix-qq')
+      @config = File.join(ENV['HOME'], '.config', 'matrix')
       @network = Network.new(host + '/_matrix/client/r0', method(:error))
       load_token
       load_batch
