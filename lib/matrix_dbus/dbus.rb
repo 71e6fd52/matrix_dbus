@@ -17,6 +17,8 @@ module MatrixDBus
     end
 
     def self.return(info)
+      return ['{}'] if info.nil?
+      return ['{}'] if info.empty?
       [JSON.pretty_generate(info)]
     end
 

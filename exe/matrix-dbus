@@ -4,7 +4,9 @@ require 'matrix_dbus'
 Thread.abort_on_exception = true
 
 def send_if_exist(obj, name, json)
-  obj.send name, JSON.pretty_generate(json) unless json.empty?
+  return if json.nil?
+  return if json.empty?
+  obj.send name, JSON.pretty_generate(json)
 end
 
 def matrix2dbus(c, obj)
