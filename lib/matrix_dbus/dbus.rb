@@ -10,6 +10,10 @@ module MatrixDBus
 
     def run
       Thread.new { @matrix.run }
+    rescue RestClient::Exception => e
+      puts e
+      puts e.response.body
+      retry
     end
 
     def self.return(info)
