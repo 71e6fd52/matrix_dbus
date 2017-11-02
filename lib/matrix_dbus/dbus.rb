@@ -63,13 +63,8 @@ module MatrixDBus
         url = URI('/upload')
         url.query = URI.encode_www_form access_token: @matrix.access_token
         url = url.to_s
-        begin
-          File.open(file, 'rb') do |f|
-            Matrix2DBus.return @matrix.network.post_raw(url, f)
-          end
-        rescue RestClient::Exception => e
-          puts e
-          puts e.response.body
+        File.open(file, 'rb') do |f|
+          Matrix2DBus.return @matrix.network.post_raw(url, f)
         end
       end
 
