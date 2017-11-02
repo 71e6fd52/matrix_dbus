@@ -1,6 +1,7 @@
 require 'json'
 require 'base64'
 require 'rest-client'
+require 'open-uri'
 require 'dbus'
 
 require 'matrix_dbus/version'
