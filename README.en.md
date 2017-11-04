@@ -20,9 +20,9 @@ Or install it yourself as:
 
 ## Usage
 
-Service: `org.dastudio.qq`
-Object path: `/org/dastudio/qq`
-Interface: `org.dastudio.cqhttp`
+Service: `org.dastudio.matrix`
+Object path: `/org/dastudio/matrix`
+Interface: `org.dastudio.matrix`
 
 TODO: Write usage instructions here
 

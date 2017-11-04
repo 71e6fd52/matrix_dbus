@@ -20,9 +20,9 @@ gem 'matrix_dbus'
 
 ## 使用
 
-Service: `org.dastudio.qq`
-Object path: `/org/dastudio/qq`
-Interface: `org.dastudio.cqhttp`
+Service: `org.dastudio.matrix`
+Object path: `/org/dastudio/matrix`
+Interface: `org.dastudio.matrix`
 
 TODO: 写使用说明
 
