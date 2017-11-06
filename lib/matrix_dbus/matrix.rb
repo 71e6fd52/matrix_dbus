@@ -1,5 +1,5 @@
 module MatrixDBus
-  #
+  # TODO
   class Matrix
     attr_reader :json, :access_token, :network
 
@@ -71,7 +71,7 @@ module MatrixDBus
     end
 
     def init_batch
-      json = get "/sync?access_token=#{@access_token}"
+      json = @network.get "/sync?access_token=#{@access_token}"
       @next_batch = json['next_batch']
       save_batch
     end
